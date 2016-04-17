@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <html>
   <body>
   <script src="FileSaver.js"></script>
@@ -67,69 +66,3 @@
   <button onclick="clicked();" type="button" id="convert_button">Convert</button>
   </body>
 </html>
-=======
-<html>
-  <body>
-  <script src="FileSaver.js"></script>
-    <script>
-      var convertButton;
-      var inputButton;
-      var text = "";
-
-      function $(id) {
-        return document.getElementById(id);
-      }
-
-      function onReady(){
-        convertButton = $("convert_button");
-        inputButton = $("select");
-        inputButton.onchange = function(event) {
-          convert(event.target.files);
-        };
-      }
-
-      function convert(files) {
-        if (!files || files.length < 1) return;
-        var file = files[0];
-        var reader = new FileReader();
-        // reader.onloadend = function(event) {
-        //   convertXML(event.target.result);
-        // };
-        reader.readAsBinaryString(file);
-      }
-
-      function convertXML(xml) {
-        var parser = new DOMParser().parseFromString(xml, "text/xml");
-        console.log({parser:parser, xml:xml});
-        self.parser = parser;
-        var faceArray = parser.getElementsByTagName('face');
-        var vertArray = parser.getElementsByTagName('position');
-        var stl = ["solid " + document.getElementById("name").value];
-        for(i = 0; i < faceArray.length; i++){
-          var face = faceArray[i];
-          stl.push("facet normal 0 0 0");
-          stl.push("\touter loop");
-          var v1 = vertArray[parseInt(face.getAttribute("v1"))];
-          var v2 = vertArray[parseInt(face.getAttribute("v2"))];
-          var v3 = vertArray[parseInt(face.getAttribute("v3"))];
-          stl.push("\t\tvertex " + v1.getAttribute("x") + " " + v1.getAttribute("y") + " " + v1.getAttribute("z"));
-          stl.push("\t\tvertex " + v2.getAttribute("x") + " " + v2.getAttribute("y") + " " + v2.getAttribute("z"));
-          stl.push("\t\tvertex " + v3.getAttribute("x") + " " + v3.getAttribute("y") + " " + v3.getAttribute("z"));
-          stl.push("\tend loop");
-          stl.push("end facet");
-        }
-        stl.push("endsolid " + document.getElementById("name").value);
-        stl = stl.join("\n");
-        saveAs(new Blob([stl], {type:"application/octet-stream"}), document.getElementById("name").value + ".stl");
-      }
-
-      document.addEventListener('DOMContentLoaded', onReady);
-    </script>
-  <input type="file" id="select" onchange="statusReady()" accept=".xml"><br>
-  <p id="statusText">- - -</p>
-  <input type="text" id="name" placeholder="Name" value="ConvertedFile"></input><br>
-  <button onclick="convertXML();" type="button" id="convert_button">Convert</button><br>
-  <p id="xmlText">- - -</p>
-  </body>
-</html>
->>>>>>> origin/master
