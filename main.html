@@ -3,8 +3,9 @@
   <script src="FileSaver.js"></script>
     <script>
       var convertButton;
-      var inputButton;
+      var inputBox;
       var text = "";
+      var filesRaw;
 
       function $(id) {
         return document.getElementById(id);
@@ -12,19 +13,24 @@
 
       function onReady(){
         convertButton = $("convert_button");
-        inputButton = $("select");
-        inputButton.onchange = function(event) {
-          convert(event.target.files);
+        inputBox = $("select");
+        inputBox.onchange = function(event) {
+          // convert(event.target.files);
+          filesRaw = event.target.files;
         };
+      }
+
+      function clicked(){
+        convert(filesRaw);
       }
 
       function convert(files) {
         if (!files || files.length < 1) return;
         var file = files[0];
         var reader = new FileReader();
-        // reader.onloadend = function(event) {
-        //   convertXML(event.target.result);
-        // };
+        reader.onloadend = function(event) {
+          convertXML(event.target.result);
+        };
         reader.readAsBinaryString(file);
       }
 
@@ -34,7 +40,7 @@
         self.parser = parser;
         var faceArray = parser.getElementsByTagName('face');
         var vertArray = parser.getElementsByTagName('position');
-        var stl = ["solid " + document.getElementById("name").value];
+        var stl = ["solid " + document.getElementById("name").value.toString()];
         for(i = 0; i < faceArray.length; i++){
           var face = faceArray[i];
           stl.push("facet normal 0 0 0");
@@ -48,17 +54,15 @@
           stl.push("\tend loop");
           stl.push("end facet");
         }
-        stl.push("endsolid " + document.getElementById("name").value);
+        stl.push("solid " + document.getElementById("name").value.toString());
         stl = stl.join("\n");
-        saveAs(new Blob([stl], {type:"application/octet-stream"}), document.getElementById("name").value + ".stl");
+        saveAs(new Blob([stl], {type:"application/octet-stream"}), document.getElementById("name").value.toString() + ".stl");
       }
 
       document.addEventListener('DOMContentLoaded', onReady);
     </script>
   <input type="file" id="select" onchange="statusReady()" accept=".xml"><br>
-  <p id="statusText">- - -</p>
-  <input type="text" id="name" placeholder="Name" value="ConvertedFile"></input><br>
-  <button onclick="convertXML();" type="button" id="convert_button">Convert</button><br>
-  <p id="xmlText">- - -</p>
+  <input type="text" id="name" value="Converted Files" placeholder="Name your file here"></input><br>
+  <button onclick="clicked();" type="button" id="convert_button">Convert</button>
   </body>
 </html>
