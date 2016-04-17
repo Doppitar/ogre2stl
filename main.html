@@ -57,6 +57,8 @@
         stl.push("solid " + document.getElementById("name").value.toString());
         stl = stl.join("\n");
         saveAs(new Blob([stl], {type:"application/octet-stream"}), document.getElementById("name").value.toString() + ".stl");
+        stl = [];
+        onready();
       }
 
       document.addEventListener('DOMContentLoaded', onReady);
