@@ -26,12 +26,15 @@
 
       function convert(files) {
         if (!files || files.length < 1) return;
-        var file = files[0];
-        var reader = new FileReader();
-        reader.onloadend = function(event) {
-          convertXML(event.target.result);
-        };
-        reader.readAsBinaryString(file);
+        // var file = files[0];
+        for(i = 0; i < files.length; i++){
+          var file = files[i];
+          var reader = new FileReader();
+          reader.onloadend = function(event) {
+            convertXML(event.target.result);
+          };
+          reader.readAsBinaryString(file);
+        }
       }
 
       function convertXML(xml) {
@@ -63,7 +66,7 @@
 
       document.addEventListener('DOMContentLoaded', onReady);
     </script>
-  <input type="file" id="select" onchange="statusReady()" accept=".xml"><br>
+  <input type="file" id="select" onchange="statusReady()" accept=".xml" multiple><br>
   <input type="text" id="name" value="Converted Files" placeholder="Name your file here"></input><br>
   <button onclick="clicked();" type="button" id="convert_button">Convert</button>
   </body>
